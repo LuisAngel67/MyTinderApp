@@ -1,0 +1,30 @@
+
+.custom-button {
+	--background: transparent;
+	--padding-start: 16px;
+	--padding-end: 16px;
+	--border-radius: 12px;
+	--box-shadow: none;
+	color: #fff;
+	font-weight: 600;
+	background: linear-gradient(30deg,
+		#dc6f59 5%,  
+		#f41448 20%,    
+		#f41448 80%, 
+		#bd1061 95%, 
+	);
+	border: none;
+	box-shadow: 0 6px 18px rgba(173, 20, 87, 0.2);
+	transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.custom-button:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 12px 24px rgba(173, 20, 87, 0.22);
+}
+
+
+.custom-button[disabled] {
+	opacity: 0.55;
+}
+

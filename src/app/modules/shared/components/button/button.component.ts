@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-button',
@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   standalone: false,
 })
 export class ButtonComponent implements OnInit {
+  @Input() label: string = 'Button';
+  @Input() type: 'button' | 'submit' = 'button';
+  @Input() disabled: boolean = false;
   constructor() {}
 
   ngOnInit() {}

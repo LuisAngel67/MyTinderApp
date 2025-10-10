@@ -1,13 +1,199 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content>
+  <div class="page-wrapper">
+    <ion-card>
+      <img src="assets/images/LogoTinderF.png" alt="logo" class="brand-logo" />
+      <ion-card-header>
+        <ion-card-title> {{ stepTitle }} </ion-card-title>
+      </ion-card-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+      <ion-card-content>
+        <div>
+          <form [formGroup]="RegisterForm" (ngSubmit)="onSubmit()">
+            <div *ngIf="step === 1">
+              <app-input
+                label="Name"
+                placeholder="jane"
+                type="text"
+                formControlName="name"
+              ></app-input>
+              <div class="field-error" *ngIf="showErrors('name')">
+                {{ getErrorMessage('name') }}
+              </div>
+
+              <app-input
+                label="Last Name"
+                placeholder="doe"
+                type="text"
+                formControlName="lastName"
+              ></app-input>
+              <div class="field-error" *ngIf="showErrors('lastName')">
+                {{ getErrorMessage('lastName') }}
+              </div>
+
+              <app-input
+                label="Email"
+                placeholder="example@gmail.com"
+                type="email"
+                formControlName="email"
+              ></app-input>
+              <div class="field-error" *ngIf="showErrors('email')">
+                {{ getErrorMessage('email') }}
+              </div>
+
+              <app-input
+                label="Password"
+                placeholder="*******"
+                type="password"
+                formControlName="password"
+              ></app-input>
+              <div class="field-error" *ngIf="showErrors('password')">
+                {{ getErrorMessage('password') }}
+              </div>
+
+              <app-input
+                label="Country"
+                placeholder="Colombia"
+                type="text"
+                formControlName="country"
+              ></app-input>
+              <div class="field-error" *ngIf="showErrors('country')">
+                {{ getErrorMessage('country') }}
+              </div>
+
+              <app-button
+                label="Continue"
+                type="button"
+                (click)="nextStep()"
+                [disabled]="!isStepValid(1)"
+              ></app-button>
+            </div>
+
+            <div *ngIf="step === 2">
+              <div class="gender-select">
+                <ion-segment (ionChange)="setGender($event.detail.value)">
+                  <ion-segment-button value="female">Woman</ion-segment-button>
+                  <ion-segment-button value="male">Man</ion-segment-button>
+                </ion-segment>
+              </div>
+
+              <ion-item lines="none">
+                <ion-label>Show my gender on my profile</ion-label>
+                <ion-toggle
+                  slot="end"
+                  [checked]="RegisterForm.get('showGenderProfile')?.value"
+                  (ionChange)="setShowGender($event.detail.checked)"
+                ></ion-toggle>
+              </ion-item>
+
+              <div class="step-actions">
+                <app-button
+                  label="Back"
+                  type="button"
+                  (click)="prevStep()"
+                ></app-button>
+                <app-button
+                  label="Continue"
+                  type="button"
+                  (click)="nextStep()"
+                  [disabled]="!isStepValid(2)"
+                ></app-button>
+              </div>
+            </div>
+
+            <div *ngIf="step === 3">
+              <ion-item>
+                <ion-label position="stacked">Birthday</ion-label>
+                <ion-datetime
+                  presentation="date"
+                  display-format="DD MMM YYYY"
+                  picker-format="DD MM YYYY"
+                  formControlName="birthDate"
+                ></ion-datetime>
+              </ion-item>
+
+              <div
+                *ngIf="attemptedFinish && !isStepValid(3)"
+                class="field-error"
+              >
+                You must be 18+ to continue
+              </div>
+              <div class="step-actions">
+                <app-button
+                  label="Back"
+                  type="button"
+                  (click)="prevStep()"
+                ></app-button>
+                <app-button
+                  label="Continue"
+                  type="button"
+                  (click)="nextStep()"
+                  [disabled]="!isStepValid(3)"
+                ></app-button>
+              </div>
+            </div>
+
+            <div *ngIf="step === 4">
+              <p>Select your passions</p>
+              <div class="passions-list">
+                <ion-chip
+                  *ngFor="let p of passionsList"
+                  (click)="togglePassion(p)"
+                  [color]="isPassionSelected(p) ? 'primary' : 'medium'"
+                >
+                  <ion-label>{{ p }}</ion-label>
+                </ion-chip>
+              </div>
+
+              <div class="step-actions">
+                <app-button
+                  label="Back"
+                  type="button"
+                  (click)="prevStep()"
+                ></app-button>
+
+                <app-button
+                  label="Continue"
+                  type="button"
+                  (click)="nextStep()"
+                  [disabled]="!isStepValid(4)"
+                ></app-button>
+              </div>
+            </div>
+
+            <div *ngIf="step === 5">
+              <div style="text-align: center; padding: 16px 0">
+                <ion-button fill="clear" size="large" class="add-media-btn">
+                  <ion-icon
+                    name="add-circle-outline"
+                    style="font-size: 48px; color: #f41448"
+                  ></ion-icon>
+                </ion-button>
+                <h3>Add Media</h3>
+              </div>
+
+              <div class="step-actions">
+                <app-button
+                  label="Back"
+                  type="button"
+                  (click)="prevStep()"
+                ></app-button>
+
+                <app-button
+                  label="Continue"
+                  type="submit"
+                  [disabled]="!isStepValid(5)"
+                ></app-button>
+              </div>
+            </div>
+
+            <app-link
+              class="link"
+              to="/login"
+              label="Already have an account? Log in"
+            ></app-link>
+          </form>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

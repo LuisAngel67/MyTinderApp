@@ -1,0 +1,23 @@
+.custom-input {
+  position: relative;
+  width: 300px;
+  margin: 20px auto;
+  overflow: visible;
+
+  ion-label.floating-label {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.2s ease;
+    color: gray;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  ion-label.floating-label.active {
+    top: -10px;
+    font-size: 0.8rem;
+    color: #ec5395;
+  }
+}

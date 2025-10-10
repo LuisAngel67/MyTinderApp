@@ -1,0 +1,75 @@
+ion-card {
+	max-width: 420px;
+	margin: 40px auto;
+	border-radius: 16px;
+	background: #0b0b0b;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+	color: #fff;
+}
+
+.page-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	padding: 32px 16px;
+	min-height: 100vh;
+}
+
+.brand-logo {
+	width: 120px;
+	display: block;
+	margin: 50px auto 1px auto;
+}
+
+ion-card-title {
+	text-align: center;
+	font-weight: 700;
+	color: #fff;
+}
+
+.gender-select {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+ion-segment {
+	--background: transparent;
+	color: #fff;
+}
+
+ion-segment-button {
+	color: #fff;
+	--background: rgba(255,255,255,0.04);
+	border-radius: 8px;
+}
+
+ion-datetime {
+	color: #fff;
+	--color: #fff;
+	--background: transparent;
+}
+
+ion-datetime .datetime-text {
+	color: #fff !important;
+}
+
+.passions-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.step-actions {
+	display: flex;
+	gap: 8px;
+	justify-content: space-between;
+	margin-top: 12px;
+}
+
+.field-error {
+	color: #dc7a59;
+	font-size: 12px;
+	margin-top: 6px;
+}
+

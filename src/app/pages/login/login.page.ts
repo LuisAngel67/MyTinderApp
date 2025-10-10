@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -7,7 +8,16 @@ import { Component, OnInit } from '@angular/core';
   standalone: false,
 })
 export class LoginPage implements OnInit {
-  constructor() {}
+  LoginForm!: FormGroup;
 
-  ngOnInit() {}
+  constructor(private fb: FormBuilder) {}
+
+  ngOnInit() {
+    this.LoginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+    });
+  }
+
+  async login() {}
 }

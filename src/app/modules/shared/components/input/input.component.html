@@ -1,3 +1,13 @@
-<p>
-  input works!
-</p>
+<ion-item fill="outline" class="custom-input">
+  <ion-label class="floating-label" [class.active]="isFocused">{{
+    label
+  }}</ion-label>
+  <ion-input
+    [type]="type"
+    [value]="value"
+    [placeholder]="isFocused ? placeholder : ''"
+    (ionFocus)="onFocus()"
+    (ionBlur)="onBlur(); onTouched()"
+    (ionInput)="onInput($event)"
+  ></ion-input>
+</ion-item>
