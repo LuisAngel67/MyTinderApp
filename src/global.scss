@@ -57,4 +57,74 @@ ion-item {
 	color: #fff;
 }
 
+.app-toast {
+	--background: transparent;
+}
 
+.app-toast .toast-wrapper {
+	background: #dc6f59;
+	color: #fff;
+	padding: 12px 16px;
+	border-radius: 12px;
+	box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+	border: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	gap: 10px;
+	font-weight: 600;
+}
+
+.app-toast--default .toast-wrapper,
+.app-toast--success .toast-wrapper,
+.app-toast--error .toast-wrapper {
+    background: #dc6f59;
+    color: #fff;
+}
+
+.app-toast .toast-message {
+	white-space: normal;
+	line-height: 1.2;
+	font-size: 14px;
+	flex: 1 1 auto;
+	text-align: center;
+}
+
+
+ion-toast.app-toast,
+ion-toast.app-toast--default,
+ion-toast.app-toast--success,
+ion-toast.app-toast--error {
+	--background: #dc6f59;
+	--color: #ffffff;
+	--border-radius: 12px;
+	--max-width: 92%;
+	--transform-origin: center bottom;
+}
+
+ion-loading.app-loader,
+ion-loading.app-loader {
+	--background: #dc6f59
+	--color: #f41448;
+	--border-radius: 12px;
+}
+
+.app-loader .loading-wrapper {
+	background: #dc6f59;
+	color: #fff;
+	padding: 14px 18px;
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.app-loader .loading-wrapper ion-spinner {
+	color: #f41448;
+}
+
+.app-loader .loading-wrapper .loading-text,
+.app-loader .loading-wrapper .loading-message {
+	color: #fff;
+}

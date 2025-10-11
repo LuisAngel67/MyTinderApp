@@ -1,0 +1,41 @@
+:root {
+	--brand-color: #f41448;
+}
+
+.login-page {
+	display: flex;
+	justify-content: center;
+	padding: 24px;
+}
+
+ion-card {
+	width: 100%;
+	max-width: 420px;
+	border-radius: 12px;
+	padding: 16px;
+}
+
+.brand-logo {
+	display: block;
+	margin: 12px auto 8px auto;
+	width: 96px;
+}
+
+.actions {
+	margin-top: 12px;
+}
+
+.links {
+	margin-top: 8px;
+	text-align: center;
+}
+
+.link {
+	color: var(--brand-color);
+}
+
+.field-error {
+	color: #e74c3c;
+	font-size: 0.9rem;
+	margin-top: 6px;
+}

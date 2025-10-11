@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  AbstractControl,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { User } from 'src/app/modules/shared/services/user/user';
+import { Filepicker } from 'src/app/modules/core/providers/filepicker/filepicker';
+import { Uploader } from 'src/app/modules/core/providers/Uploader/uploader';
+import { Query } from 'src/app/modules/core/providers/query/query';
+import { Loader } from 'src/app/modules/core/providers/loader/loader';
+import { Toast } from 'src/app/modules/core/providers/toast/toast';
 
 @Component({
   selector: 'app-register',
@@ -30,7 +32,18 @@ export class RegisterPage implements OnInit {
   selectedGender?: string;
   attemptedFinish = false;
 
-  constructor(private fb: FormBuilder) {}
+  selectedPhotoUrl?: string | null;
+
+  constructor(
+    private fb: FormBuilder,
+    private readonly userService: User,
+    private readonly router: Router,
+    private readonly filepicker: Filepicker,
+    private readonly uploader: Uploader,
+    private readonly query: Query,
+    private readonly loader: Loader,
+    private readonly toast: Toast
+  ) {}
 
   ngOnInit() {
     this.RegisterForm = this.fb.group({
@@ -170,6 +183,75 @@ export class RegisterPage implements OnInit {
   }
 
   public async DoRegister() {
-    console.log('User register succesfully');
+    const payload = { ...this.RegisterForm.value } as any;
+
+    try {
+      await this.loader.show('Creating account...');
+      const uid = await this.userService.createProfile(payload);
+
+      const photos = (this.RegisterForm.get('photos')?.value as any[]) || [];
+      if (photos.length > 0) {
+        const first = photos[0];
+        const url = first.url ?? first.dataUrl ?? null;
+        if (url) {
+          await this.query.set('images', uid, { uid, url });
+        }
+      }
+      await this.loader.hide();
+      await this.toast.show('Account created successfully', 2500);
+      await this.router.navigate(['/login']);
+    } catch (err) {
+      await this.loader.hide();
+      const e = err as any;
+      const message = e?.message ?? String(err ?? 'Unknown error');
+      console.error('DoRegister error', err);
+
+      const code = e?.code ?? '';
+      const isEmailInUse =
+        code === 'auth/email-already-in-use' ||
+        message.toLowerCase().includes('email-already-in-use') ||
+        message.toLowerCase().includes('already in use') ||
+        message.toLowerCase().includes('usuario ya registrado') ||
+        message.toLowerCase().includes('correo');
+
+      if (isEmailInUse) {
+        this.step = 1;
+        const emailCtrl = this.RegisterForm.get('email');
+        if (emailCtrl) {
+          emailCtrl.markAsTouched();
+        }
+        await this.toast.show(
+          'Email already registered. Please sign in or reset your password.',
+          5000
+        );
+      } else {
+        await this.toast.show(`Registration failed: ${message}`, 4000);
+      }
+    }
+  }
+
+  async onAddPhotoClicked() {
+    try {
+      await this.loader.show('Uploading image...');
+      const ok = await this.filepicker.requestPermission();
+      if (!ok) return;
+
+      const file = await this.filepicker.pickImage();
+      if (!file) return;
+
+      const key = `ProfileImages/${Date.now()}_${file.name}`;
+      const publicUrl = await this.uploader.uploadToSupabase(file, key);
+
+      this.selectedPhotoUrl = publicUrl;
+      const photos = (this.RegisterForm.get('photos')?.value as any[]) || [];
+      photos.unshift({ name: file.name, url: publicUrl });
+      this.RegisterForm.patchValue({ photos });
+      await this.loader.hide();
+      await this.toast.show('Image uploaded', 2000);
+    } catch (err) {
+      await this.loader.hide();
+      console.error('onAddPhotoClicked error', err);
+      await this.toast.show('Image upload failed', 3000);
+    }
   }
 }

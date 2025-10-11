@@ -162,13 +162,27 @@
 
             <div *ngIf="step === 5">
               <div style="text-align: center; padding: 16px 0">
-                <ion-button fill="clear" size="large" class="add-media-btn">
+                <ion-button
+                  fill="clear"
+                  size="large"
+                  class="add-media-btn"
+                  (click)="onAddPhotoClicked()"
+                >
                   <ion-icon
                     name="add-circle-outline"
                     style="font-size: 48px; color: #f41448"
                   ></ion-icon>
                 </ion-button>
-                <h3>Add Media</h3>
+
+                <div style="margin-top: 12px">
+                  <img
+                    *ngIf="selectedPhotoUrl"
+                    [src]="selectedPhotoUrl"
+                    class="photo-preview"
+                  />
+                </div>
+
+                <h3>Add profile photo</h3>
               </div>
 
               <div class="step-actions">
