@@ -7,6 +7,7 @@ import { Uploader } from 'src/app/modules/core/providers/Uploader/uploader';
 import { Loader } from 'src/app/modules/core/providers/loader/loader';
 import { Toast } from 'src/app/modules/core/providers/toast/toast';
 import { Query } from 'src/app/modules/core/providers/query/query';
+import { PASSIONS } from 'src/app/interfaces/passions';
 import {
   Firestore,
   doc,
@@ -28,14 +29,7 @@ import { firstValueFrom } from 'rxjs';
 export class UpdatePage implements OnInit {
   profileForm!: FormGroup;
   passions: string[] = [];
-  initialPassions: string[] = [
-    'Harry potter',
-    'Music',
-    'Video games',
-    'Travel',
-    'Sports',
-    'Movies',
-  ];
+  initialPassions: string[] = PASSIONS.slice();
   selected: string[] = [];
   selectedPhotoUrl?: string | null;
   origProfile?: any;

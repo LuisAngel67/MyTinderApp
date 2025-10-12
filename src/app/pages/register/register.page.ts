@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { PASSIONS } from 'src/app/interfaces/passions';
 import { User } from 'src/app/modules/shared/services/user/user';
 import { Filepicker } from 'src/app/modules/core/providers/filepicker/filepicker';
 import { Uploader } from 'src/app/modules/core/providers/Uploader/uploader';
@@ -19,14 +20,7 @@ export class RegisterPage implements OnInit {
   RegisterForm!: FormGroup;
   step = 1;
 
-  passionsList: string[] = [
-    'Harry potter',
-    'Music',
-    'Video games',
-    'Travel',
-    'Sports',
-    'Movies',
-  ];
+  passionsList: string[] = PASSIONS.slice();
 
   selectedPassions: string[] = [];
 
