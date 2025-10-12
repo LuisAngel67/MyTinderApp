@@ -24,6 +24,12 @@
 
         </activity>
 
+        <!-- Registered MatchingActivity -->
+        <activity
+            android:name="com.myPlugins.matching.MatchingActivity"
+            android:exported="false"
+            android:label="@string/app_name" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

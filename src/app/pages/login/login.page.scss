@@ -3,14 +3,14 @@
 }
 
 .login-page {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	min-height: calc(100vh - 32px);
-	padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px;
 }
 
-ion-card {
+ion-card:not(.page-card) {
 	width: 100%;
 	max-width: 420px;
 	border-radius: 12px;

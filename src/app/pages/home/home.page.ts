@@ -13,6 +13,7 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { firstValueFrom } from 'rxjs';
+import { MatchingService } from 'src/app/modules/core/services/matching/matching';
 
 @Component({
   selector: 'app-home',
@@ -23,12 +24,14 @@ import { firstValueFrom } from 'rxjs';
 export class HomePage implements OnInit {
   bannerImageUrl?: string | null;
   suggestedProfile: any = null;
+  isLoading = false;
 
   constructor(
     private router: Router,
     private readonly auth: Auth,
     private readonly toast: Toast,
-    private readonly firestore: Firestore
+    private readonly firestore: Firestore,
+    private matching: MatchingService
   ) {}
 
   ngOnInit() {}
@@ -36,6 +39,8 @@ export class HomePage implements OnInit {
   async ionViewWillEnter() {
     const uid = this.auth.currentUid;
     if (!uid) return;
+
+    this.isLoading = true;
 
     try {
       const meRef = doc(this.firestore, 'users', uid);
@@ -101,6 +106,8 @@ export class HomePage implements OnInit {
       console.warn('Could not load suggested profile', err);
       this.bannerImageUrl = null;
       this.suggestedProfile = null;
+    } finally {
+      setTimeout(() => (this.isLoading = false), 250);
     }
   }
 
@@ -124,6 +131,15 @@ export class HomePage implements OnInit {
     } catch (err) {
       console.error('Logout failed', err);
       await this.toast.show('Could not log out', 2500, 'error');
+    }
+  }
+
+  async openMatching() {
+    try {
+      const res = await this.matching.openMatching('mi_usuario_1');
+      console.log('Resultado:', res);
+    } catch (e) {
+      console.error(e);
     }
   }
 }

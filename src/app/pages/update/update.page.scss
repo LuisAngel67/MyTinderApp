@@ -3,11 +3,17 @@
   padding: 16px;
 }
 
+.page-wrapper ion-card:not(.page-card) {
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  margin: 0 auto;
+}
+
 .page-center {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 32px);
+  min-height: 100vh;
 }
 
 .profile-name {
@@ -47,6 +53,26 @@
 
 .passions-editor {
   padding: 12px 0;
+}
+
+.passions-editor {
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.editor-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .editor-chips {

@@ -1,6 +1,11 @@
 <ion-content>
   <div class="home-banner">
-    <ion-card>
+    <div class="loader-wrap" *ngIf="isLoading">
+      <div class="loader-card">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+    </div>
+    <ion-card class="page-card">
       <ion-card-header class="card-title-above">
         <div class="register-static title-with-logo">
           <span>Discover</span>
@@ -52,7 +57,7 @@
             <ion-button
               class="icon-btn"
               fill="clear"
-              (click)="onDiscover()"
+              (click)="openMatching()"
               aria-label="Explore"
             >
               <ion-icon name="globe-outline" size="large"></ion-icon>
