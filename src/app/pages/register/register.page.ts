@@ -5,6 +5,7 @@ import { User } from 'src/app/modules/shared/services/user/user';
 import { Filepicker } from 'src/app/modules/core/providers/filepicker/filepicker';
 import { Uploader } from 'src/app/modules/core/providers/Uploader/uploader';
 import { Query } from 'src/app/modules/core/providers/query/query';
+import { Auth } from 'src/app/modules/core/providers/Auth/auth';
 import { Loader } from 'src/app/modules/core/providers/loader/loader';
 import { Toast } from 'src/app/modules/core/providers/toast/toast';
 
@@ -42,7 +43,8 @@ export class RegisterPage implements OnInit {
     private readonly uploader: Uploader,
     private readonly query: Query,
     private readonly loader: Loader,
-    private readonly toast: Toast
+    private readonly toast: Toast,
+    private readonly auth: Auth
   ) {}
 
   ngOnInit() {
@@ -118,12 +120,40 @@ export class RegisterPage implements OnInit {
     return false;
   }
 
-  nextStep() {
-    if (this.isStepValid(this.step)) {
-      this.step = Math.min(5, this.step + 1);
-    } else {
+  async nextStep() {
+    if (!this.isStepValid(this.step)) {
       this.RegisterForm.markAllAsTouched();
+      return;
     }
+
+    if (this.step === 1) {
+      const email = this.RegisterForm.get('email')?.value;
+      if (email) {
+        const normalized = String(email).trim().toLowerCase();
+        try {
+          await this.loader.show('Verifying email...');
+          const exists = await this.auth.doesEmailExist(normalized);
+          if (exists) {
+            await this.toast.show(
+              'Email already registered. Please sign in or use another email.',
+              4000
+            );
+            return;
+          }
+        } catch (err) {
+          console.error('Email verification failed', err);
+          await this.toast.show(
+            'Could not verify email. Check your connection.',
+            3500
+          );
+          return;
+        } finally {
+          await this.loader.hide();
+        }
+      }
+    }
+
+    this.step = Math.min(5, this.step + 1);
   }
 
   prevStep() {
@@ -206,27 +236,7 @@ export class RegisterPage implements OnInit {
       const message = e?.message ?? String(err ?? 'Unknown error');
       console.error('DoRegister error', err);
 
-      const code = e?.code ?? '';
-      const isEmailInUse =
-        code === 'auth/email-already-in-use' ||
-        message.toLowerCase().includes('email-already-in-use') ||
-        message.toLowerCase().includes('already in use') ||
-        message.toLowerCase().includes('usuario ya registrado') ||
-        message.toLowerCase().includes('correo');
-
-      if (isEmailInUse) {
-        this.step = 1;
-        const emailCtrl = this.RegisterForm.get('email');
-        if (emailCtrl) {
-          emailCtrl.markAsTouched();
-        }
-        await this.toast.show(
-          'Email already registered. Please sign in or reset your password.',
-          5000
-        );
-      } else {
-        await this.toast.show(`Registration failed: ${message}`, 4000);
-      }
+      await this.toast.show(`Registration failed: ${message}`, 4000);
     }
   }
 

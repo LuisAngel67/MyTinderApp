@@ -1,8 +1,9 @@
 <ion-button
   class="custom-button"
+  [class.fit]="fit"
   [type]="type"
   [disabled]="disabled"
-  expand="full"
+  [expand]="fit ? '' : 'full'"
 >
   {{ label }}
 </ion-button>

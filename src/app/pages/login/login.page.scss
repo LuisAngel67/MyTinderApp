@@ -5,6 +5,8 @@
 .login-page {
 	display: flex;
 	justify-content: center;
+	align-items: center;
+	min-height: calc(100vh - 32px);
 	padding: 24px;
 }
 
@@ -15,6 +17,20 @@ ion-card {
 	padding: 16px;
 }
 
+ion-card-header {
+	text-align: center;
+	background: var(--brand-color);
+	color: #fff;
+	border-radius: 8px;
+	margin-bottom: 12px;
+}
+
+ion-card-title,
+ion-card-subtitle {
+	color: #fff !important;
+	text-align: center;
+}
+
 .brand-logo {
 	display: block;
 	margin: 12px auto 8px auto;
@@ -23,6 +39,7 @@ ion-card {
 
 .actions {
 	margin-top: 12px;
+	text-align: center;
 }
 
 .links {

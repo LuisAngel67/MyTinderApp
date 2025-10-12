@@ -3,7 +3,7 @@
 	--background: transparent;
 	--padding-start: 16px;
 	--padding-end: 16px;
-	--border-radius: 12px;
+	--border-radius: 20px;
 	--box-shadow: none;
 	color: #fff;
 	font-weight: 600;
@@ -16,6 +16,7 @@
 	border: none;
 	box-shadow: 0 6px 18px rgba(173, 20, 87, 0.2);
 	transition: transform 120ms ease, box-shadow 120ms ease;
+	border-radius: 20px;
 }
 
 .custom-button:hover {
@@ -26,5 +27,15 @@
 
 .custom-button[disabled] {
 	opacity: 0.55;
+}
+
+.custom-button.fit {
+	--padding-start: 12px;
+	--padding-end: 12px;
+	--border-radius: 20px;
+	display: inline-flex !important;
+	width: auto !important;
+	min-width: 0;
+	border-radius: 20px;
 }
 

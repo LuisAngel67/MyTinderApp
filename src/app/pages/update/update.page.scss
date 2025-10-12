@@ -1,0 +1,123 @@
+
+.page-wrapper {
+  padding: 16px;
+}
+
+.page-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 32px);
+}
+
+.profile-name {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.profile-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ff3b30;
+}
+
+.passions-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.add-passion {
+  background: #ff3b30;
+  color: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 20px;
+  line-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.passions-editor {
+  padding: 12px 0;
+}
+
+.editor-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.editor-chips ion-chip {
+  --background: #dc6f59;
+  padding: 6px 10px;
+  border-radius: 18px;
+  cursor: pointer;
+}
+
+.editor-chips ion-chip.selected {
+  --background: #f41448;
+  color: #fff;
+}
+
+.save-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.save-changes {
+  display: inline-block;
+  min-width: 220px;
+  width: auto;
+  margin-top: 5px;
+}
+
+.extra-images {
+  margin-top: 16px;
+}
+
+.thumbnails {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.thumb {
+  width: 90px;
+  height: 90px;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.passions-row ion-chip {
+  --background: #dc6f59;
+  padding: 6px 10px;
+  border-radius: 18px;
+  cursor: pointer;
+}
+
+.passions-row ion-chip.selected {
+  --background: #f41448;
+  color: #fff;
+}

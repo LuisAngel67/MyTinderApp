@@ -10,6 +10,7 @@ export class ButtonComponent implements OnInit {
   @Input() label: string = 'Button';
   @Input() type: 'button' | 'submit' = 'button';
   @Input() disabled: boolean = false;
+  @Input() fit: boolean = true;
   constructor() {}
 
   ngOnInit() {}

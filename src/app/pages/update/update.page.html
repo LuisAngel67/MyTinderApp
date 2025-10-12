@@ -1,13 +1,102 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>update</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-header [translucent]="true"> </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">update</ion-title>
-    </ion-toolbar>
+    <ion-title size="large">Profile</ion-title>
   </ion-header>
+
+  <div class="page-wrapper page-center">
+    <ion-card>
+      <ion-card-content>
+        <ion-buttons slot="start">
+          <ion-back-button defaultHref="/home"></ion-back-button>
+        </ion-buttons>
+        <h1 class="profile-name">Update Profile</h1>
+        <div
+          class="profile-top"
+          style="text-align: center; margin-bottom: 16px"
+        >
+          <img
+            [src]="selectedPhotoUrl || 'assets/images/LogoTinderF.png'"
+            alt="profile"
+            class="profile-photo"
+          />
+          <div class="change-photo" style="margin-top: 8px">
+            <app-button
+              label="Change profile photo"
+              (click)="onChangeProfilePhoto()"
+            ></app-button>
+          </div>
+        </div>
+
+        <form [formGroup]="profileForm" *ngIf="!editingPassions">
+          <app-input label="Name" formControlName="name"></app-input>
+          <app-input label="Last Name" formControlName="lastName"></app-input>
+          <app-input label="Country" formControlName="country"></app-input>
+
+          <ion-item lines="none">
+            <ion-label>Show my gender on my profile</ion-label>
+            <ion-toggle
+              slot="end"
+              [checked]="profileForm.get('showGenderProfile')?.value"
+              (ionChange)="profileForm.patchValue({ showGenderProfile: $event.detail.checked })"
+            ></ion-toggle>
+          </ion-item>
+
+          <div class="section">
+            <h3>Passions</h3>
+            <div class="passions-row">
+              <ion-chip
+                *ngFor="let p of passions"
+                (click)="togglePassion(p)"
+                [class.selected]="isSelected(p)"
+              >
+                <ion-label>{{ p }}</ion-label>
+              </ion-chip>
+              <button type="button" class="add-passion" (click)="addPassion()">
+                +
+              </button>
+            </div>
+          </div>
+          <div *ngIf="extraImages && extraImages.length" class="extra-images">
+            <h3>Extra images</h3>
+            <div class="thumbnails">
+              <div class="thumb" *ngFor="let img of extraImages">
+                <img [src]="img.url" alt="extra" />
+              </div>
+            </div>
+          </div>
+          <div class="section" style="margin-top: 16px; text-align: center">
+            <app-button label="Add media" (click)="addMedia()"></app-button>
+
+            <div class="save-container">
+              <app-button
+                class="save-changes"
+                label="Save Changes"
+                (click)="saveChanges()"
+                [disabled]="!hasChanges()"
+              ></app-button>
+            </div>
+          </div>
+        </form>
+
+        <div *ngIf="editingPassions" class="passions-editor">
+          <h3>Select your passions</h3>
+          <div class="editor-chips">
+            <ion-chip
+              *ngFor="let p of initialPassions"
+              (click)="toggleEditorPassion(p)"
+              [class.selected]="isEditorSelected(p)"
+            >
+              <ion-label>{{ p }}</ion-label>
+            </ion-chip>
+          </div>
+          <div class="editor-actions">
+            <app-button label="Cancel" (click)="cancelPassions()"></app-button>
+            <app-button label="OK" (click)="acceptPassions()"></app-button>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

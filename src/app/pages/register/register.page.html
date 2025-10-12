@@ -3,6 +3,7 @@
     <ion-card>
       <img src="assets/images/LogoTinderF.png" alt="logo" class="brand-logo" />
       <ion-card-header>
+        <div class="register-static">Register</div>
         <ion-card-title> {{ stepTitle }} </ion-card-title>
       </ion-card-header>
 
@@ -60,12 +61,14 @@
                 {{ getErrorMessage('country') }}
               </div>
 
-              <app-button
-                label="Continue"
-                type="button"
-                (click)="nextStep()"
-                [disabled]="!isStepValid(1)"
-              ></app-button>
+              <div class="continue-right">
+                <app-button
+                  label="Continue"
+                  type="button"
+                  (click)="nextStep()"
+                  [disabled]="!isStepValid(1)"
+                ></app-button>
+              </div>
             </div>
 
             <div *ngIf="step === 2">
@@ -91,12 +94,14 @@
                   type="button"
                   (click)="prevStep()"
                 ></app-button>
-                <app-button
-                  label="Continue"
-                  type="button"
-                  (click)="nextStep()"
-                  [disabled]="!isStepValid(2)"
-                ></app-button>
+                <div class="continue-right">
+                  <app-button
+                    label="Continue"
+                    type="button"
+                    (click)="nextStep()"
+                    [disabled]="!isStepValid(2)"
+                  ></app-button>
+                </div>
               </div>
             </div>
 
@@ -111,24 +116,21 @@
                 ></ion-datetime>
               </ion-item>
 
-              <div
-                *ngIf="attemptedFinish && !isStepValid(3)"
-                class="field-error"
-              >
-                You must be 18+ to continue
-              </div>
+              <div class="field-error">You must be 18+ to continue</div>
               <div class="step-actions">
                 <app-button
                   label="Back"
                   type="button"
                   (click)="prevStep()"
                 ></app-button>
-                <app-button
-                  label="Continue"
-                  type="button"
-                  (click)="nextStep()"
-                  [disabled]="!isStepValid(3)"
-                ></app-button>
+                <div class="continue-right">
+                  <app-button
+                    label="Continue"
+                    type="button"
+                    (click)="nextStep()"
+                    [disabled]="!isStepValid(3)"
+                  ></app-button>
+                </div>
               </div>
             </div>
 
@@ -138,7 +140,7 @@
                 <ion-chip
                   *ngFor="let p of passionsList"
                   (click)="togglePassion(p)"
-                  [color]="isPassionSelected(p) ? 'primary' : 'medium'"
+                  [class.selected]="isPassionSelected(p)"
                 >
                   <ion-label>{{ p }}</ion-label>
                 </ion-chip>
@@ -151,17 +153,30 @@
                   (click)="prevStep()"
                 ></app-button>
 
-                <app-button
-                  label="Continue"
-                  type="button"
-                  (click)="nextStep()"
-                  [disabled]="!isStepValid(4)"
-                ></app-button>
+                <div class="continue-right">
+                  <app-button
+                    label="Continue"
+                    type="button"
+                    (click)="nextStep()"
+                    [disabled]="!isStepValid(4)"
+                  ></app-button>
+                </div>
               </div>
             </div>
 
             <div *ngIf="step === 5">
               <div style="text-align: center; padding: 16px 0">
+                <div class="circle-avatar">
+                  <img
+                    *ngIf="selectedPhotoUrl; else placeholder"
+                    [src]="selectedPhotoUrl"
+                    class="profile-photo"
+                  />
+                  <ng-template #placeholder>
+                    <div class="profile-photo placeholder"></div>
+                  </ng-template>
+                </div>
+
                 <ion-button
                   fill="clear"
                   size="large"
@@ -174,14 +189,6 @@
                   ></ion-icon>
                 </ion-button>
 
-                <div style="margin-top: 12px">
-                  <img
-                    *ngIf="selectedPhotoUrl"
-                    [src]="selectedPhotoUrl"
-                    class="photo-preview"
-                  />
-                </div>
-
                 <h3>Add profile photo</h3>
               </div>
 
@@ -192,19 +199,23 @@
                   (click)="prevStep()"
                 ></app-button>
 
-                <app-button
-                  label="Continue"
-                  type="submit"
-                  [disabled]="!isStepValid(5)"
-                ></app-button>
+                <div class="continue-right">
+                  <app-button
+                    label="Finish"
+                    type="submit"
+                    [disabled]="!selectedPhotoUrl || !isStepValid(5)"
+                  ></app-button>
+                </div>
               </div>
             </div>
 
-            <app-link
-              class="link"
-              to="/login"
-              label="Already have an account? Log in"
-            ></app-link>
+            <div class="link-center">
+              <app-link
+                class="link"
+                to="/login"
+                label="Already have an account? Log in"
+              ></app-link>
+            </div>
           </form>
         </div>
       </ion-card-content>

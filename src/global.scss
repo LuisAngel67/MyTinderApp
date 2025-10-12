@@ -15,9 +15,27 @@
 @import "@ionic/angular/css/flex-utils.css";
 
 
-ion-app, ion-content, .ion-page {
-	background: #0f0f0f; 
+/* Ensure the whole viewport uses the dark background so there are no white margins */
+html, body {
+	height: 100%;
+	min-height: 100%;
+	margin: 0;
+	padding: 0;
+	background: #0f0f0f;
 	color: #fff;
+}
+
+app-root, ion-app, .ion-page {
+	min-height: 100vh;
+	height: 100%;
+	background: #0f0f0f !important;
+	color: #fff;
+}
+
+ion-content {
+	--background: #0f0f0f;
+	background: #0f0f0f;
+	min-height: 100vh;
 }
 
 .app-center {
