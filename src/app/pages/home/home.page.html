@@ -1,16 +1,79 @@
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">home</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <div
-    class="page-wrapper"
-    style="padding: 16px; display: flex; justify-content: center"
-  >
-    <div style="display: flex; gap: 12px; align-items: center">
-      <app-button label="Edit profile" (click)="goToUpdate()"></app-button>
-      <app-button label="Log out" (click)="logout()"></app-button>
-    </div>
+<ion-content>
+  <div class="home-banner">
+    <ion-card>
+      <ion-card-header class="card-title-above">
+        <div class="register-static title-with-logo">
+          <span>Discover</span>
+          <img src="assets/images/LogoTinderF.png" alt="Flame logo" class="flame-logo" />
+        </div>
+      </ion-card-header>
+
+      <div class="image-wrap">
+        <img
+          *ngIf="bannerImageUrl; else noImg"
+          [src]="bannerImageUrl"
+          alt="banner"
+        />
+        <ng-template #noImg>
+          <div class="placeholder">No image</div>
+        </ng-template>
+        <div class="overlay" *ngIf="suggestedProfile">
+          <div class="overlay-main">
+            <div class="name">
+              {{ suggestedProfile.name }} {{ suggestedProfile.lastName }}{{
+              suggestedProfile.age ? (', ' + suggestedProfile.age) : '' }}
+            </div>
+            <div class="meta">{{ suggestedProfile.country }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-area"></div>
+
+      <ion-footer class="bottom-bar">
+        <ion-toolbar>
+          <ion-buttons class="bar-buttons" slot="primary">
+            <ion-button
+              class="icon-btn"
+              fill="clear"
+              (click)="onMessages()"
+              aria-label="Messages"
+            >
+              <ion-icon
+                name="chatbubble-ellipses-outline"
+                size="large"
+              ></ion-icon>
+            </ion-button>
+
+            <ion-button
+              class="icon-btn"
+              fill="clear"
+              (click)="onDiscover()"
+              aria-label="Explore"
+            >
+              <ion-icon name="globe-outline" size="large"></ion-icon>
+            </ion-button>
+
+            <ion-button
+              class="icon-btn"
+              fill="clear"
+              (click)="goToUpdate()"
+              aria-label="Profile"
+            >
+              <ion-icon name="person-circle-outline" size="large"></ion-icon>
+            </ion-button>
+
+            <ion-button
+              class="icon-btn logout"
+              fill="clear"
+              (click)="logout()"
+              aria-label="Logout"
+            >
+              <ion-icon name="log-out-outline" size="large"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>
+    </ion-card>
   </div>
 </ion-content>

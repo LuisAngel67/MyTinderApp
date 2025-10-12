@@ -2,6 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Auth } from 'src/app/modules/core/providers/Auth/auth';
 import { Toast } from 'src/app/modules/core/providers/toast/toast';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  query,
+  limit,
+  doc,
+  docData,
+  where,
+} from '@angular/fire/firestore';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -10,13 +21,96 @@ import { Toast } from 'src/app/modules/core/providers/toast/toast';
   standalone: false,
 })
 export class HomePage implements OnInit {
+  bannerImageUrl?: string | null;
+  suggestedProfile: any = null;
+
   constructor(
     private router: Router,
     private readonly auth: Auth,
-    private readonly toast: Toast
+    private readonly toast: Toast,
+    private readonly firestore: Firestore
   ) {}
 
   ngOnInit() {}
+
+  async ionViewWillEnter() {
+    const uid = this.auth.currentUid;
+    if (!uid) return;
+
+    try {
+      const meRef = doc(this.firestore, 'users', uid);
+      const me = (await firstValueFrom(docData(meRef as any))) as any;
+      const myGender = String((me && me.gender) || '').toLowerCase();
+      const desired = myGender === 'male' ? 'female' : 'male';
+      const usersCol = collection(this.firestore, 'users');
+      const q = query(usersCol, where('gender', '==', desired), limit(10));
+      const rows = (await firstValueFrom(
+        collectionData(q as any) as any
+      )) as any[];
+
+      let picked: any = null;
+      if (Array.isArray(rows) && rows.length > 0) {
+        for (const r of rows) {
+          const candidateUid =
+            (r as any).uid ?? (r as any).id ?? (r as any).uid;
+          if (!candidateUid) {
+            picked = r;
+            break;
+          }
+          if (String(candidateUid) !== String(uid)) {
+            picked = r;
+            break;
+          }
+        }
+      }
+
+      if (picked) {
+        this.suggestedProfile = picked;
+
+        const bd = picked.birthDate || picked.birthdate || picked.birth;
+        if (bd) {
+          try {
+            const d = new Date(bd);
+            if (!isNaN(d.getTime())) {
+              const age = Math.abs(
+                new Date(Date.now() - d.getTime()).getUTCFullYear() - 1970
+              );
+              this.suggestedProfile.age = age;
+            }
+          } catch (_) {}
+        }
+
+        const imagesCol = collection(this.firestore, 'images');
+        const q2 = query(
+          imagesCol,
+          where('uid', '==', picked.uid || picked.id || picked.uid),
+          limit(1)
+        );
+        const imgs = (await firstValueFrom(
+          collectionData(q2 as any) as any
+        )) as any[];
+        if (Array.isArray(imgs) && imgs.length > 0) {
+          this.bannerImageUrl = imgs[0].url ?? null;
+        } else {
+          this.bannerImageUrl = picked.photoUrl ?? picked.url ?? null;
+        }
+      } else {
+        this.bannerImageUrl = null;
+      }
+    } catch (err) {
+      console.warn('Could not load suggested profile', err);
+      this.bannerImageUrl = null;
+      this.suggestedProfile = null;
+    }
+  }
+
+  onMessages() {
+    this.router.navigate(['/messages']);
+  }
+
+  onDiscover() {
+    this.toast.show('Discover clicked', 1000);
+  }
 
   goToUpdate() {
     this.router.navigate(['/update']);
