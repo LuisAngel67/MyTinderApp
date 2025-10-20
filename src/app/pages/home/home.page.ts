@@ -49,22 +49,31 @@ export class HomePage implements OnInit {
       const desired = myGender === 'male' ? 'female' : 'male';
       const usersCol = collection(this.firestore, 'users');
       const q = query(usersCol, where('gender', '==', desired), limit(10));
+      // request the document id as `id` so we can reliably reference the user's id
       const rows = (await firstValueFrom(
-        collectionData(q as any) as any
+        collectionData(q as any, { idField: 'id' }) as any
       )) as any[];
+      console.debug('[Home] users rows:', rows && rows.length);
 
       let picked: any = null;
       if (Array.isArray(rows) && rows.length > 0) {
         for (const r of rows) {
-          const candidateUid =
-            (r as any).uid ?? (r as any).id ?? (r as any).uid;
-          if (!candidateUid) {
-            picked = r;
+          const candidateUid = (r as any).uid ?? (r as any).id ?? null;
+          // skip entries without an id/uid
+          if (!candidateUid) continue;
+          if (String(candidateUid) !== String(uid)) {
+            picked = { ...(r as any), uid: candidateUid };
             break;
           }
-          if (String(candidateUid) !== String(uid)) {
-            picked = r;
-            break;
+        }
+        // fallback: if none found different than current user, try first row that has an id
+        if (!picked) {
+          for (const r of rows) {
+            const candidateUid = (r as any).uid ?? (r as any).id ?? null;
+            if (candidateUid) {
+              picked = { ...(r as any), uid: candidateUid };
+              break;
+            }
           }
         }
       }
@@ -85,17 +94,22 @@ export class HomePage implements OnInit {
           } catch (_) {}
         }
 
-        const imagesCol = collection(this.firestore, 'images');
-        const q2 = query(
-          imagesCol,
-          where('uid', '==', picked.uid || picked.id || picked.uid),
-          limit(1)
-        );
-        const imgs = (await firstValueFrom(
-          collectionData(q2 as any) as any
-        )) as any[];
-        if (Array.isArray(imgs) && imgs.length > 0) {
-          this.bannerImageUrl = imgs[0].url ?? null;
+        const userIdForImages = picked.uid ?? picked.id ?? null;
+        if (userIdForImages) {
+          const imagesCol = collection(this.firestore, 'images');
+          const q2 = query(
+            imagesCol,
+            where('uid', '==', userIdForImages),
+            limit(1)
+          );
+          const imgs = (await firstValueFrom(
+            collectionData(q2 as any) as any
+          )) as any[];
+          if (Array.isArray(imgs) && imgs.length > 0) {
+            this.bannerImageUrl = imgs[0].url ?? null;
+          } else {
+            this.bannerImageUrl = picked.photoUrl ?? picked.url ?? null;
+          }
         } else {
           this.bannerImageUrl = picked.photoUrl ?? picked.url ?? null;
         }
